@@ -1,0 +1,23 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+h1{
+    text-align: center;
+    margin-top: 50px;
+}
+.board-container{
+    background-color: grey;
+    display: grid;
+    grid-template: repeat(3, 200px)/ repeat(3, 200px);
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px
+}
+.cell{
+    border: 1px solid black;
+}
+.cell:hover{
+    background-color: white;
+}
