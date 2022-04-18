@@ -17,6 +17,10 @@ h1{
 }
 .cell{
     border: 1px solid black;
+    font-size: 7em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .cell:hover{
     background-color: white;
