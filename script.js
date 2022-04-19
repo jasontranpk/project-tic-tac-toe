@@ -12,6 +12,9 @@ const gameBoard = (() => {
             else if(value == 'O'){
                 cells[index].textContent = 'O';
             }
+            else{
+                cells[index].textContent = '';
+            }
         })
     };
     const checkNull = function(cellId){
@@ -24,7 +27,11 @@ const gameBoard = (() => {
     const changeBoardCell = function (cellId, mask){
         gameBoard_flow[cellId] = mask;
     }
-    return {render, changeBoardCell, cells, checkNull, gameBoard_flow}
+    const resetBoard = () =>{
+        gameBoard_flow = [0,0,0,0,0,0,0,0,0];
+        gameBoard.render();
+    }
+    return {render, changeBoardCell, cells, checkNull, gameBoard_flow, resetBoard}
 })();
 
 const player = (name, playerMask) =>
@@ -48,12 +55,42 @@ const game = (()=>{
                 {
                     player1.playerTick(e.target.id);
                     currentPlayerTurn = player2;
-                    console.log(checkWinner());
+                    if(checkWinner() != 0){
+                        if(checkWinner() == 'X'){
+                            setTimeout(function() {
+                                alert("player 1 win");
+                                gameBoard.resetBoard()
+                            },20)
+                            //setTimeout(gameBoard.resetBoard(),21);
+                        }
+                        else{
+                            setTimeout(function() {
+                                alert("player 2 win");
+                                gameBoard.resetBoard()
+                            },20)
+                            //setTimeout(gameBoard.resetBoard(),21);
+                        }
+                    }
                 }
                 else{
                     player2.playerTick(e.target.id);
                     currentPlayerTurn = player1;
-                    console.log(checkWinner());
+                    if(checkWinner() != 0){
+                        if(checkWinner() == 'X'){
+                            setTimeout(function() {
+                                alert("player 1 win");
+                                gameBoard.resetBoard()
+                            },20)
+                            //setTimeout(gameBoard.resetBoard(),21);
+                        }
+                        else{
+                            setTimeout(function() {
+                                alert("player 2 win");
+                                gameBoard.resetBoard()
+                            },20)
+                            //setTimeout(gameBoard.resetBoard(),21);
+                        }
+                    }
                 }
             }
         })
@@ -67,22 +104,32 @@ const game = (()=>{
             oCount++;
         if(gameBoard.gameBoard_flow[y] == 'X' )
             xCount++;
-        if(gameBoard.gameBoard_flow[x] == 'O' )
+        if(gameBoard.gameBoard_flow[y] == 'O' )
             oCount++;
         if(gameBoard.gameBoard_flow[z] == 'X' )
             xCount++;
-        if(gameBoard.gameBoard_flow[x] == 'O' )
+        if(gameBoard.gameBoard_flow[z] == 'O' )
             oCount++;
         if(xCount == 3)
             return 'X';
         if (oCount == 3 )
             return 'O';
-        return false;
+        return '0';
     }
     const checkWinner = () =>{
-        if(_checkRowCol(0,1,2)){
-            return _checkRowCol(0,1,2);
+        const winCases = [120, 345, 678, 630, 471, 852, 840, 642];
+        for (let winCase of winCases)
+        {
+            winCase = winCase.toString().split('');
+            let digits = winCase.map(Number)
+            let resultCheck = _checkRowCol(digits[0],digits[1],digits[2])
+            // console.log(digits);
+            if(resultCheck === 'X' || resultCheck === 'O'){
+                return resultCheck;
+                break;
+            }
         }
+        return '0';
     }
 }
 )();
