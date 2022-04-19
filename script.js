@@ -5,7 +5,7 @@ const gameBoard = (() => {
     const cells = Array.from(_cellNode);
 
     const render = function (){
-        gameBoard_flow.forEach((value, index) => {
+        this.gameBoard_flow.forEach((value, index) => {
             if(value == 'X'){
                 cells[index].textContent = 'X';
             }
@@ -18,18 +18,19 @@ const gameBoard = (() => {
         })
     };
     const checkNull = function(cellId){
-        if(gameBoard_flow[cellId] == 0){
+        if(this.gameBoard_flow[cellId] == 0){
             return true;
         }
         else
             return false;
     }
     const changeBoardCell = function (cellId, mask){
-        gameBoard_flow[cellId] = mask;
+        this.gameBoard_flow[cellId] = mask;
     }
     const resetBoard = () =>{
-        gameBoard_flow = [0,0,0,0,0,0,0,0,0];
-        gameBoard.render();
+        this.gameBoard_flow = [0,0,0,0,0,0,0,0,0];
+        gameBoard.gameBoard_flow = [0,0,0,0,0,0,0,0,0];
+        render();
     }
     return {render, changeBoardCell, cells, checkNull, gameBoard_flow, resetBoard}
 })();
@@ -40,56 +41,73 @@ const player = (name, playerMask) =>
     this.playerMask = playerMask;
     const playerTick = (cellId) => {
         gameBoard.changeBoardCell(cellId, playerMask);
+        console.log(gameBoard.gameBoard_flow);
         gameBoard.render();
     }
     return {name, playerMask, playerTick};
 }
-const player1 = player('jason', 'X');
-const player2 = player('computer', 'O');
+const player1 = player('', 'X');
+const player2 = player('player2', 'O');
 const game = (()=>{
     let currentPlayerTurn = player1;
     gameBoard.cells.forEach(cell => {
         cell.addEventListener('click', (e) =>{
             if(gameBoard.checkNull(e.target.id)){
+                
                 if(currentPlayerTurn == player1)
                 {
                     player1.playerTick(e.target.id);
                     currentPlayerTurn = player2;
-                    if(checkWinner() != 0){
+                    if(checkWinner() == 'X' || checkWinner() == 'Y' ){
                         if(checkWinner() == 'X'){
                             setTimeout(function() {
-                                alert("player 1 win");
+                                alert(`${player1.name} win!`);
                                 gameBoard.resetBoard()
+                                currentPlayerTurn = player1;
                             },20)
-                            //setTimeout(gameBoard.resetBoard(),21);
                         }
                         else{
                             setTimeout(function() {
-                                alert("player 2 win");
+                                alert(`${player2.name} win!`);
                                 gameBoard.resetBoard()
+                                currentPlayerTurn = player1;
                             },20)
-                            //setTimeout(gameBoard.resetBoard(),21);
                         }
+                    }
+                    if(checkWinner() == 1){
+                        setTimeout(function() {
+                            alert(`DRAW`);
+                            gameBoard.resetBoard()
+                            currentPlayerTurn = player1;
+                        },20)
                     }
                 }
                 else{
                     player2.playerTick(e.target.id);
                     currentPlayerTurn = player1;
-                    if(checkWinner() != 0){
+                    if(checkWinner() == 'X' || checkWinner() == 'Y' ){
                         if(checkWinner() == 'X'){
                             setTimeout(function() {
-                                alert("player 1 win");
+                                alert(`${player1.name} win!`);
                                 gameBoard.resetBoard()
+                                currentPlayerTurn = player1;
+
                             },20)
-                            //setTimeout(gameBoard.resetBoard(),21);
                         }
                         else{
                             setTimeout(function() {
-                                alert("player 2 win");
+                                alert(`${player2.name} win!`);
                                 gameBoard.resetBoard()
+                                currentPlayerTurn = player1;
                             },20)
-                            //setTimeout(gameBoard.resetBoard(),21);
                         }
+                    }
+                    if(checkWinner() == 1){
+                        setTimeout(function() {
+                            alert(`DRAW`);
+                            gameBoard.resetBoard()
+                            currentPlayerTurn = player1;
+                        },20)
                     }
                 }
             }
@@ -129,8 +147,21 @@ const game = (()=>{
                 break;
             }
         }
+        if(!gameBoard.gameBoard_flow.includes(0)){
+            return 1;
+        }
         return '0';
     }
 }
 )();
-gameBoard.render();
+const displayController = (()=>{
+    const startBtn = document.getElementById('startBtn');
+    const nameInput = document.getElementById('name');
+    const resetBtn = document.getElementById('reset');
+    startBtn.addEventListener('click', (e)=>{
+        player1.name = nameInput.value;
+    })
+    resetBtn.addEventListener('click', (e)=>{
+        gameBoard.resetBoard();
+    })
+})();

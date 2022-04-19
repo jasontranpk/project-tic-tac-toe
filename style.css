@@ -13,7 +13,7 @@ h1{
     width: 600px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 100px
+    margin-top: 30px;
 }
 .cell{
     border: 1px solid black;
@@ -24,4 +24,8 @@ h1{
 }
 .cell:hover{
     background-color: white;
+}
+.user-input, .bot-button{
+    margin-top: 30px;
+    text-align: center;
 }
