@@ -41,7 +41,7 @@ const player = (name, playerMask) =>
     this.playerMask = playerMask;
     const playerTick = (cellId) => {
         gameBoard.changeBoardCell(cellId, playerMask);
-        console.log(gameBoard.gameBoard_flow);
+        // console.log(gameBoard.gameBoard_flow);
         gameBoard.render();
     }
     return {name, playerMask, playerTick};
@@ -58,57 +58,12 @@ const game = (()=>{
                 {
                     player1.playerTick(e.target.id);
                     currentPlayerTurn = player2;
-                    if(checkWinner() == 'X' || checkWinner() == 'Y' ){
-                        if(checkWinner() == 'X'){
-                            setTimeout(function() {
-                                alert(`${player1.name} win!`);
-                                gameBoard.resetBoard()
-                                currentPlayerTurn = player1;
-                            },20)
-                        }
-                        else{
-                            setTimeout(function() {
-                                alert(`${player2.name} win!`);
-                                gameBoard.resetBoard()
-                                currentPlayerTurn = player1;
-                            },20)
-                        }
-                    }
-                    if(checkWinner() == 1){
-                        setTimeout(function() {
-                            alert(`DRAW`);
-                            gameBoard.resetBoard()
-                            currentPlayerTurn = player1;
-                        },20)
-                    }
+                    checkWinner();
                 }
                 else{
                     player2.playerTick(e.target.id);
                     currentPlayerTurn = player1;
-                    if(checkWinner() == 'X' || checkWinner() == 'Y' ){
-                        if(checkWinner() == 'X'){
-                            setTimeout(function() {
-                                alert(`${player1.name} win!`);
-                                gameBoard.resetBoard()
-                                currentPlayerTurn = player1;
-
-                            },20)
-                        }
-                        else{
-                            setTimeout(function() {
-                                alert(`${player2.name} win!`);
-                                gameBoard.resetBoard()
-                                currentPlayerTurn = player1;
-                            },20)
-                        }
-                    }
-                    if(checkWinner() == 1){
-                        setTimeout(function() {
-                            alert(`DRAW`);
-                            gameBoard.resetBoard()
-                            currentPlayerTurn = player1;
-                        },20)
-                    }
+                    checkWinner();
                 }
             }
         })
@@ -135,22 +90,48 @@ const game = (()=>{
         return '0';
     }
     const checkWinner = () =>{
-        const winCases = [120, 345, 678, 630, 471, 852, 840, 642];
-        for (let winCase of winCases)
-        {
-            winCase = winCase.toString().split('');
-            let digits = winCase.map(Number)
-            let resultCheck = _checkRowCol(digits[0],digits[1],digits[2])
-            // console.log(digits);
-            if(resultCheck === 'X' || resultCheck === 'O'){
-                return resultCheck;
-                break;
+        let result = '';
+        if(!gameBoard.gameBoard_flow.includes(0)){
+            result = 1;
+        }
+        else{
+            const winCases = [120, 345, 678, 630, 471, 852, 840, 642];
+            for (let winCase of winCases)
+            {
+                winCase = winCase.toString().split('');
+                let digits = winCase.map(Number)
+                let resultCheck = _checkRowCol(digits[0],digits[1],digits[2])
+                console.log(resultCheck);
+                if(resultCheck == 'X' || resultCheck == 'O'){
+                    result =  resultCheck;
+                    break;
+                }
             }
         }
-        if(!gameBoard.gameBoard_flow.includes(0)){
-            return 1;
+        console.log(result);
+        if(result == 'X'){
+            setTimeout(function() {
+                alert(`${player1.name} win!`);
+                gameBoard.resetBoard()
+                currentPlayerTurn = player1;
+            },20)
         }
-        return '0';
+        if(result == 'O'){
+            setTimeout(function() {
+                alert(`${player2.name} win!`);
+                gameBoard.resetBoard()
+                currentPlayerTurn = player1;
+            },20)
+        }
+        
+        if(result == 1){
+            setTimeout(function() {
+                alert(`DRAW`);
+                gameBoard.resetBoard()
+                currentPlayerTurn = player1;
+            },20)
+        }
+
     }
 }
 )();
